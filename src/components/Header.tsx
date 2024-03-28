@@ -9,7 +9,7 @@ export default function Header () {
         <div className="flex gap-4 items-baseline">
           <h1 className="text-xl font-semibold primary-text">Status Board</h1>
           <div className="flex gap-1 text-xs secondary-text">
-            <span>21</span> <span>Notes</span>
+            <span>21</span> <span>Cards</span>
           </div>
         </div>
         <div className="flex gap-1 items-center">
