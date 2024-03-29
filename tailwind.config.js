@@ -17,5 +17,9 @@ export default {
   plugins: [
     // eslint-disable-next-lin no-undef
     require("@tailwindcss/typography"),
+    require('tailwind-scrollbar'),
   ],
+  future: {
+    hoverOnlyWhenSupported: true,
+  }
 };

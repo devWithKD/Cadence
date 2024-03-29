@@ -1,9 +1,9 @@
-import StatusBoard from "./components/StatusBoard";
+import KanbanBoard from "./components/KanbanBoard";
 
 function App() {
   return (
     <div>
-    <StatusBoard/>
+    <KanbanBoard/>
     </div>
   );
 }
