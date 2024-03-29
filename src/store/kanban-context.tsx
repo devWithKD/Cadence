@@ -2,6 +2,8 @@
 
 import { ReactNode, createContext, useReducer } from "react";
 import { Category, Card, KanbanState } from "../interfaces";
+import { categories } from "../utils/categories";
+import { cards } from "../utils/cards";
 
 interface Action {
   type: string;
@@ -24,8 +26,8 @@ interface KanbanContextInterface {
 
 export const KanbanContext = createContext<KanbanContextInterface>({
   // Main State
-  cards: [] as Array<Card>,
-  categories: [] as Array<Category>,
+  cards: [],
+  categories: [],
   // Card Methods
   addCard: () => {},
   updateCard: () => {},
@@ -89,8 +91,8 @@ export default function KanbanContextProvider({
   children: ReactNode;
 }) {
   const [kanbanState, kanbanDispatch] = useReducer(kanbanReducer, {
-    cards: [],
-    categories: [],
+    cards: cards,
+    categories: categories,
   });
 
   function addCardHandler(card: Card) {
