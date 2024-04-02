@@ -9,11 +9,13 @@ export interface Card {
   id: string;
   parent: string;
   title: string;
+  hasStart: boolean;
+  startDate?: Date|null;
   hasDue: boolean;
-  dueDate: Date | null;
+  dueDate?: Date | null;
   description: string;
   hasCheckList: boolean;
-  checkList: Array<MileStone> | null;
+  checkList?: Array<MileStone> | null;
 }
 
 export interface Category {
