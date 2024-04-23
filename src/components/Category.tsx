@@ -6,10 +6,11 @@ import { PiDotsThreeVerticalBold } from "react-icons/pi";
 import IconButton from "./IconButton";
 import { Tooltip } from "react-tooltip";
 import { ToolTipContext } from "../store/tooltip-context";
-import { Card } from "../interfaces";
+import { CardType } from "../interfaces";
 import CardCreationForm from "./CardCreationForm";
+import Card from "./Card";
 
-const emptyCard: Card = {
+const emptyCard: CardType = {
   id: "",
   description: "",
   hasDue: false,
@@ -88,10 +89,10 @@ export default function Category({
             <div className="flex gap-1 items-center">
               <IconButton
                 Icon={IoAdd}
-                className="add-card-anchor"
+                className="add-card-anchor rounded-full"
                 onClick={handleCreateCardBtn}
               />
-              <IconButton Icon={PiDotsThreeVerticalBold} />
+              <IconButton Icon={PiDotsThreeVerticalBold} className="rounded-full" />
               {tooltipCtx.active && (
                 <Tooltip anchorSelect=".add-card-anchor" place="right">
                   Add Card
@@ -102,7 +103,7 @@ export default function Category({
         )}
       </div>
       {cards.length > 0 &&
-        cards.map((card) => <div key={card.id}>{card.title}</div>)}
+        cards.map((card) => <Card key={card.id} id={card.id} />)}
       {cardCreationMode && (
         <CardCreationForm
           value={newCard.title}

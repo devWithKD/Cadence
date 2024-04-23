@@ -48,7 +48,7 @@ const CardCreationForm = forwardRef(function (
         exitCardCreation();
       }
     },
-    [createCard],
+    [createCard,exitCardCreation],
   );
 
   useEffect(() => {
@@ -60,7 +60,7 @@ const CardCreationForm = forwardRef(function (
   }, [handleClick]);
 
   return (
-    <div className="flex flex-col gap-2 px-2" ref={containerRef}>
+    <div className="flex flex-col gap-2 px-2 last:mb-2" ref={containerRef}>
       <input
         className="px-2 py-1 rounded-lg focus-visible:outline-none border border-s-slate-300 dark:border-slate-600 text-sm primary-text bg-slate-100 dark:bg-slate-700"
         placeholder="Enter title for this card..."
@@ -68,7 +68,7 @@ const CardCreationForm = forwardRef(function (
         ref={addCardInputRef}
         onChange={onChange}
       />
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-3">
         <button
           className={`px-2 py-1 rounded-lg secondary-text text-sm primary-btn-slate`}
         >
@@ -76,7 +76,7 @@ const CardCreationForm = forwardRef(function (
         </button>
         <IconButton
           Icon={GrClose}
-          className="cancel-add-card"
+          className="cancel-add-card secondary-text rounded"
           onClick={exitCardCreation}
         />
         {tooltipCtx.active && (

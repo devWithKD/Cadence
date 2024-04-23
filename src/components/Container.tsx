@@ -18,7 +18,7 @@ export default function Container() {
               />
             ))
           : ""}
-        <Category isButton={true} />
+       <Category isButton={true} />
       </div>
   );
 }

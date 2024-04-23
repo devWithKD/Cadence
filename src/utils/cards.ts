@@ -36,7 +36,7 @@ export const cards = [
     hasStart: false,
     hasDue: true,
     dueDate: new Date("2024-04-03"),
-    description: "Analyze key metrics and identify areas for improvement.",
+    description: "Analyze key metrics and identify areas for improvement.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris vel massa a ligula tempor viverra non quis felis. Mauris faucibus vel lacus tincidunt dictum. Etiam vitae nunc eleifend, imperdiet dui quis, sollicitudin nisi. Mauris tempor rutrum magna sed condimentum. Nam consequat malesuada risus, sit amet pretium purus aliquam quis. Aliquam.",
     hasCheckList: true,
     checkList: [
       {

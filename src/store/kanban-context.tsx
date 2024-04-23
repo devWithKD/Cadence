@@ -1,26 +1,26 @@
 "use strict";
 
 import { ReactNode, createContext, useReducer } from "react";
-import { Category, Card, KanbanState } from "../interfaces";
+import { KanbanState, CategoryType, CardType } from "../interfaces";
 import { categories } from "../utils/categories";
 import { cards } from "../utils/cards";
 
 interface Action {
   type: string;
-  payload: Category | Card | string;
+  payload: CategoryType | CardType | string;
 }
 
 interface KanbanContextInterface {
   // Main State
-  cards: Array<Card>;
-  categories: Array<Category>;
-  // Card Methods
-  addCard: (card: Card) => void;
-  updateCard: (card: Card) => void;
+  cards: Array<CardType>;
+  categories: Array<CategoryType>;
+  // CardType Methods
+  addCard: (card: CardType) => void;
+  updateCard: (card: CardType) => void;
   removeCard: (cardID: string) => void;
-  // Category Methods
-  addCategory: (category: Category) => void;
-  updateCategory: (category: Category) => void;
+  // CategoryType Methods
+  addCategory: (category: CategoryType) => void;
+  updateCategory: (category: CategoryType) => void;
   removrCategory: (catID: string) => void;
 }
 
@@ -28,11 +28,11 @@ export const KanbanContext = createContext<KanbanContextInterface>({
   // Main State
   cards: [],
   categories: [],
-  // Card Methods
+  // CardType Methods
   addCard: () => {},
   updateCard: () => {},
   removeCard: () => {},
-  // Category Methods
+  // CategoryType Methods
   addCategory: () => {},
   updateCategory: () => {},
   removrCategory: () => {},
@@ -40,41 +40,41 @@ export const KanbanContext = createContext<KanbanContextInterface>({
 
 function kanbanReducer(state: KanbanState, action: Action) {
   if (action.type === "ADD_CARD") {
-    // Add Card Logic
-    const cardsState: Array<Card> = [...state.cards];
-    cardsState.push(action.payload as Card);
+    // Add CardType Logic
+    const cardsState: Array<CardType> = [...state.cards];
+    cardsState.push(action.payload as CardType);
     return { ...state, cards: cardsState };
   } else if (action.type === "UPDATE_CARD") {
-    // Update Card Logic
-    const cardsState: Array<Card> = [...state.cards];
+    // Update CardType Logic
+    const cardsState: Array<CardType> = [...state.cards];
     const updatedArray = cardsState.map((card) => {
-      if (card.id === (action.payload as Card).id) {
-        return action.payload as Card;
+      if (card.id === (action.payload as CardType).id) {
+        return action.payload as CardType;
       } else return card;
     });
     return { ...state, cards: updatedArray };
   } else if (action.type === "REMOVE_CARD") {
-    // Remove Card Logic
+    // Remove CardType Logic
     return {
       ...state,
       cards: state.cards.filter((card) => card.id != action.payload),
     };
   } else if (action.type === "ADD_CATEGORY") {
-    // Add Card Logic
+    // Add CardType Logic
     const categoriesState = [...state.categories];
-    categoriesState.push(action.payload as Category);
+    categoriesState.push(action.payload as CategoryType);
     return { ...state, categories: categoriesState };
   } else if (action.type === "UPDATE_CATEGORY") {
-    // Update Card Logic
+    // Update CardType Logic
     const categoriesState = [...state.categories];
     const updatedCats = categoriesState.map((category) => {
-      if (category.id === (action.payload as Category).id) {
-        return action.payload as Category;
+      if (category.id === (action.payload as CategoryType).id) {
+        return action.payload as CategoryType;
       } else return category;
     });
     return { ...state, categories: updatedCats };
   } else if (action.type === "REMOVE_CATEGORY") {
-    // Remove Card Logic
+    // Remove CardType Logic
     return {
       ...state,
       categories: state.categories.filter(
@@ -95,22 +95,22 @@ export default function KanbanContextProvider({
     categories: categories,
   });
 
-  function addCardHandler(card: Card) {
+  function addCardHandler(card: CardType) {
     kanbanDispatch({
       type: "ADD_CARD",
       payload: card,
     });
   }
 
-  function addCategoryHandler(category: Category) {
+  function addCategoryHandler(category: CategoryType) {
     kanbanDispatch({ type: "ADD_CATEGORY", payload: category });
   }
 
-  function updateCardHandler(card: Card) {
+  function updateCardHandler(card: CardType) {
     kanbanDispatch({ type: "UPDATE_CARD", payload: card });
   }
 
-  function updateCategoryHandler(category: Category) {
+  function updateCategoryHandler(category: CategoryType) {
     kanbanDispatch({ type: "UPDATE_CATEGORY", payload: category });
   }
 
@@ -126,11 +126,11 @@ export default function KanbanContextProvider({
     // Main State
     cards: kanbanState.cards,
     categories: kanbanState.categories,
-    // Card Methods
+    // CardType Methods
     addCard: addCardHandler,
     updateCard: updateCardHandler,
     removeCard: removeCardHandler,
-    // Category Methods
+    // CategoryType Methods
     addCategory: addCategoryHandler,
     updateCategory: updateCategoryHandler,
     removrCategory: removeCategoryHandler,

@@ -12,8 +12,8 @@ export default function IconButton({
   onClick?: (event: React.MouseEvent) => void;
 }) {
   return (
-    <div
-      className={`p-1 rounded-full transition duration-200 hover:bg-slate-200 dark:hover:bg-slate-500 relative cursor-pointer ${className}`}
+    <button
+      className={`p-1 transition duration-200 hover:bg-slate-200 dark:hover:bg-slate-500 relative cursor-pointer ${className}`}
       onClick={onClick}
     >
       <Icon
@@ -27,6 +27,6 @@ export default function IconButton({
                 : 16
         }
       />
-    </div>
+    </button>
   );
 }

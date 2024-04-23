@@ -5,7 +5,7 @@ export interface MileStone {
   description: string;
 }
 
-export interface Card {
+export interface CardType {
   id: string;
   parent: string;
   title: string;
@@ -18,15 +18,15 @@ export interface Card {
   checkList?: Array<MileStone> | null;
 }
 
-export interface Category {
+export interface CategoryType {
   id: string;
   title: string;
   color: string;
 }
 
 export interface KanbanState {
-  cards: Array<Card>;
-  categories: Array<Category>;
+  cards: Array<CardType>;
+  categories: Array<CategoryType>;
 }
 
 export interface ThemeAction {
