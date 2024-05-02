@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 export default function Textarea({
   onValChange,
@@ -12,7 +12,7 @@ export default function Textarea({
   className?: string;
 }) {
   const [text, setText] = useState(value);
-  // console.log(text);
+  const [height, setHeight] = useState(0);
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setText(e.target.value);
@@ -21,33 +21,33 @@ export default function Textarea({
 
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
-  useEffect(() => {
+  const resize = useCallback(() => {
     if (textAreaRef.current) {
-      // console.log("textResize");
+      // console.log(value);
+      // textAreaRef.current.classList.add("h-0")
       textAreaRef.current.style.height = "0px";
       const scrollHeight = textAreaRef.current.scrollHeight;
-      textAreaRef.current.style.height = `${scrollHeight}px`;
+      setHeight(Math.max(scrollHeight, 18 ));
     }
-  }, [text]);
-
-  useEffect(()=>{
-    const handleWindowResize = ()=>{
-      if (textAreaRef.current) {
-        // console.log("textResize");
-        textAreaRef.current.style.height = "0px";
-        const scrollHeight = textAreaRef.current.scrollHeight;
-        textAreaRef.current.style.height = `${scrollHeight}px`;
-      }
-    }
-    window.addEventListener("resize",handleWindowResize);
-    return ()=>{
-      window.removeEventListener("resize", handleWindowResize);
-    }
-  },[])
+  }, []);
 
   useEffect(() => {
-    setText(value);
-  }, [value]);
+    if (textAreaRef.current) textAreaRef.current.style.height = `${height}px`;
+  }, [height]);
+
+  useEffect(() => {
+    resize();
+  }, []);
+
+  useEffect(() => {
+    const handleWindowResize = () => {
+      resize();
+    };
+    window.addEventListener("resize", handleWindowResize);
+    return () => {
+      window.removeEventListener("resize", handleWindowResize);
+    };
+  }, []);
 
   return (
     <textarea
