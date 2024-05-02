@@ -175,7 +175,6 @@ const CardWizard = memo(function CardWizard({
 
   return (
     <div className="fixed z-50 w-screen h-screen top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex justify-center items-center backdrop-blur-sm backdrop-brightness-75">
-      (
       <div
         className="w-full lg:w-4/6 2xl:w-1/2 lg:aspect-[4/2] rounded-lg shadow-2xl shadow-slate-400 dark:shadow-slate-800 bg-slate-200 dark:bg-gradient-to-tr dark:from-slate-900 dark:to-slate-700 backdrop:backdrop-blur-sm dark:outline-slate-600 dark:outline outline-1 overflow-x-hidden relative py-6 px-4 lg:px-6"
         ref={clickableAreaRef}
@@ -231,7 +230,7 @@ const CardWizard = memo(function CardWizard({
                     });
                   }}
                   placeholder="Add a more detailed description here..."
-                  className="w-full p-2 outline-none rounded custom-input max-h-44 lg:max-h-none"
+                  className="w-full p-2 outline-none rounded custom-input max-h-44 lg:max-h-none resize-none"
                 />
               </div>
             </FormElement>
@@ -346,7 +345,6 @@ const CardWizard = memo(function CardWizard({
           </div>
         </div>
       </div>
-      )
     </div>
   );
 });

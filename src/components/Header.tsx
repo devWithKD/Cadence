@@ -9,7 +9,7 @@ export default function Header() {
   return (
     <header className="w-full px-4 py-3 flex justify-between items-center select-none">
       <div className="flex gap-4 items-baseline">
-        <h1 className="text-3xl font-semibold primary-text">Status Board</h1>
+        <h1 className="text-3xl font-semibold primary-text">Kanban Board</h1>
         <div className="flex gap-1 secondary-text">
           <span>{kanbanCtx.cards.length}</span> <span>Cards</span>
         </div>

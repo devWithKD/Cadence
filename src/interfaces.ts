@@ -35,3 +35,7 @@ export interface ThemeAction {
 export interface ThemeState {
   theme: string;
 }
+
+export const ItemTypes = {
+  CARD: "card",
+};

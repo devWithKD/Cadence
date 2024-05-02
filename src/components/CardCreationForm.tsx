@@ -10,6 +10,7 @@ import {
 // import { ToolTipContext } from "../store/tooltip-context";
 import { GrClose } from "react-icons/gr";
 import IconButton from "./IconButton";
+import Button from "./Button";
 
 const CardCreationForm = forwardRef(function CardCreationForm(
   {
@@ -42,9 +43,9 @@ const CardCreationForm = forwardRef(function CardCreationForm(
         containerRef.current &&
         !containerRef.current.contains(e!.target as Node)
       ) {
-      if (addCardInputRef.current && addCardInputRef.current.value != "") {
-        createCard();
-      }
+        if (addCardInputRef.current && addCardInputRef.current.value != "") {
+          createCard();
+        }
         exitCardCreation();
       }
     },
@@ -69,11 +70,11 @@ const CardCreationForm = forwardRef(function CardCreationForm(
         onChange={onChange}
       />
       <div className="flex items-center gap-3">
-        <button
-          className={`px-2 py-1 rounded-lg secondary-text text-sm primary-btn-slate`}
-        >
-          Add Card
-        </button>
+        <Button
+          className= "px-2 py-2 rounded-lg secondary-text text-sm bg-slate-300 hover:bg-slate-400 hover:text-slate-50 dark:bg-slate-500 dark:hover:bg-slate-400 dark:hover:text-slate-900"
+          onClick={createCard}
+          title="Add Card"
+        />
         <IconButton
           Icon={GrClose}
           className="cancel-add-card secondary-text rounded"
