@@ -1,13 +1,17 @@
+import { memo } from "react";
 import { IconType } from "react-icons";
 
-export default function IconButton({
+const IconButton = memo(
+function IconButton({
   Icon,
-  buttonType = "medium",
+  buttonType,
   className,
   onClick,
+  size
 }: {
   Icon: IconType;
   buttonType?: "small" | "medium" | "large";
+  size?: number; 
   className?: string;
   onClick?: (event: React.MouseEvent) => void;
 }) {
@@ -23,10 +27,12 @@ export default function IconButton({
             : buttonType == "small"
               ? 8
               : buttonType == "large"
-                ? 32
-                : 16
+                ? 24
+                : size ? size : 16
         }
       />
     </button>
   );
-}
+})
+
+export default IconButton;

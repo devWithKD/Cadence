@@ -1,11 +1,15 @@
-import { useContext } from "react";
+import { memo, useContext } from "react";
 import { KanbanContext } from "../store/kanban-context";
+import { CardWizardModalContext } from "../store/card-wizard-context";
 
-export default function Card({ id }: { id: string }) {
+const Card = memo(function Card({ id }: { id: string }) {
   const kanbanCtx = useContext(KanbanContext);
   const cardDetail = kanbanCtx.cards.filter((card) => card.id == id)[0];
 
-  function handleEditCard(){
+  const wizardCtx = useContext(CardWizardModalContext);
+
+  function handleEditCard() {
+    wizardCtx.modalRef?.current?.showModal(cardDetail.id);
   }
 
   return (
@@ -16,4 +20,6 @@ export default function Card({ id }: { id: string }) {
       <span>{cardDetail.title}</span>
     </div>
   );
-}
+});
+
+export default Card;

@@ -2,7 +2,6 @@ export interface MileStone {
   id: string;
   title: string;
   status: boolean;
-  description: string;
 }
 
 export interface CardType {

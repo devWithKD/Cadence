@@ -1,17 +1,17 @@
 import {
   forwardRef,
-  useContext,
+  // useContext,
   useCallback,
   useRef,
   useImperativeHandle,
   useEffect,
 } from "react";
-import { Tooltip } from "react-tooltip";
-import { ToolTipContext } from "../store/tooltip-context";
+// import { Tooltip } from "react-tooltip";
+// import { ToolTipContext } from "../store/tooltip-context";
 import { GrClose } from "react-icons/gr";
 import IconButton from "./IconButton";
 
-const CardCreationForm = forwardRef(function (
+const CardCreationForm = forwardRef(function CardCreationForm(
   {
     value,
     onChange,
@@ -23,17 +23,17 @@ const CardCreationForm = forwardRef(function (
     exitCardCreation: () => void;
     createCard: () => void;
   },
-  ref,
+  ref
 ) {
- const tooltipCtx = useContext(ToolTipContext);
+  // const tooltipCtx = useContext(ToolTipContext);
   const containerRef = useRef<HTMLDivElement>(null);
   const addCardInputRef = useRef<HTMLInputElement>(null);
   useImperativeHandle(ref, () => {
     return {
-      focus: ()=>{
+      focus: () => {
         addCardInputRef.current?.focus();
-      }
-    }
+      },
+    };
   });
 
   const handleClick = useCallback(
@@ -48,7 +48,7 @@ const CardCreationForm = forwardRef(function (
         exitCardCreation();
       }
     },
-    [createCard,exitCardCreation],
+    [createCard, exitCardCreation]
   );
 
   useEffect(() => {
@@ -79,11 +79,11 @@ const CardCreationForm = forwardRef(function (
           className="cancel-add-card secondary-text rounded"
           onClick={exitCardCreation}
         />
-        {tooltipCtx.active && (
+        {/* {tooltipCtx.active && (
           <Tooltip anchorSelect=".cancel-add-card" place="right">
             Cancel
           </Tooltip>
-        )}
+        )} */}
       </div>
     </div>
   );

@@ -12,7 +12,14 @@ export default function Button({
   className?: string;
 }) {
   return (
-    <button className={`rounded flex justify-start gap-2 items-center bg-slate-100 dark:bg-slate-600 hover:bg-slate-300 dark:hover:bg-slate-500 px-2 py-1 secondary-text text-xs ${className}`} onClick={onClick}>
+    <button
+      className={`${className} ${
+        className && className.includes("bg")
+          ? ""
+          : "bg-slate-100 dark:bg-slate-600 hover:bg-slate-300 dark:hover:bg-slate-500"
+      } rounded flex justify-start gap-2 items-center px-2 py-1 secondary-text text-xs `}
+      onClick={onClick}
+    >
       {Icon && <Icon />}
       <span>{title}</span>
     </button>

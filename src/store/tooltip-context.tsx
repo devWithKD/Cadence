@@ -10,7 +10,7 @@ export default function ToolTipContextProvider({
 }: {
   children: ReactNode;
 }) {
-  const [active, setActive] = useState(true);
+  const [active, setActive] = useState(false);
 
   const toggleModeHandler = () => {
     setActive((mode) => !mode);
