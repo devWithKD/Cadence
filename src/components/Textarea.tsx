@@ -12,7 +12,6 @@ export default function Textarea({
   className?: string;
 }) {
   const [text, setText] = useState(value);
-  const [height, setHeight] = useState(0);
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setText(e.target.value);
@@ -23,21 +22,15 @@ export default function Textarea({
 
   const resize = useCallback(() => {
     if (textAreaRef.current) {
-      // console.log(value);
-      // textAreaRef.current.classList.add("h-0")
       textAreaRef.current.style.height = "0px";
       const scrollHeight = textAreaRef.current.scrollHeight;
-      setHeight(Math.max(scrollHeight, 18 ));
+      textAreaRef.current.style.height = `${scrollHeight}px`
     }
   }, []);
 
   useEffect(() => {
-    if (textAreaRef.current) textAreaRef.current.style.height = `${height}px`;
-  }, [height]);
-
-  useEffect(() => {
     resize();
-  }, []);
+  }, [resize, text]);
 
   useEffect(() => {
     const handleWindowResize = () => {
@@ -47,6 +40,7 @@ export default function Textarea({
     return () => {
       window.removeEventListener("resize", handleWindowResize);
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
