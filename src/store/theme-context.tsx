@@ -1,12 +1,5 @@
 import { createContext, useReducer, ReactNode, useEffect } from "react";
-
-interface ThemeAction {
-  type: string;
-}
-
-interface ThemeState {
-  theme: string;
-}
+import { ThemeAction, ThemeState } from "../interfaces";
 
 export const ThemeContext = createContext({
   theme: "light",
