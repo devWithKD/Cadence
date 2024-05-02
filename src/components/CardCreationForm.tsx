@@ -38,13 +38,13 @@ const CardCreationForm = forwardRef(function CardCreationForm(
 
   const handleClick = useCallback(
     (e: MouseEvent) => {
-      if (addCardInputRef.current && addCardInputRef.current.value != "") {
-        createCard();
-      }
       if (
         containerRef.current &&
         !containerRef.current.contains(e!.target as Node)
       ) {
+      if (addCardInputRef.current && addCardInputRef.current.value != "") {
+        createCard();
+      }
         exitCardCreation();
       }
     },
