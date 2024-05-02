@@ -6,9 +6,10 @@ import { PiDotsThreeVerticalBold } from "react-icons/pi";
 import IconButton from "./IconButton";
 // import { Tooltip } from "react-tooltip";
 // import { ToolTipContext } from "../store/tooltip-context";
-import { CardType } from "../interfaces";
+import { CardType, ItemTypes } from "../interfaces";
 import CardCreationForm from "./CardCreationForm";
 import Card from "./Card";
+import { useDrop } from "react-dnd";
 
 const emptyCard: CardType = {
   id: "",
@@ -67,18 +68,35 @@ export default function Category({
     }
   }, [cardCreationMode]);
 
+  const isDropOver = useCallback(
+    (item: CardType) => {
+      if (id) {
+        const updatedCard = { ...item, parent: id as string };
+        kanbanCtx.updateCard(updatedCard);
+      }
+    },
+    [id, kanbanCtx]
+  );
+
+  const [{ isOver }, drop] = useDrop(() => ({
+    accept: ItemTypes.CARD,
+    drop: (item) => isDropOver(item as CardType),
+    collect: (monitor) => ({ isOver: !!monitor.isOver({ shallow: true }) }),
+  }));
+
   return (
     <div
       className={`min-w-80 w-80 min-h-8 h-fit rounded-2xl shadow-lg shadow-slate-300 dark:shadow-slate-700 ${
         isButton
           ? "bg-gray-200 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-500 cursor-pointer transition duration-200"
           : `bg-slate-100 dark:bg-slate-600 ${color}`
-      }  flex flex-col gap-2 p-2`}
+      }  flex flex-col gap-2 p-2 transition-all duration-300 ${isOver ? "scale-105 brightness-105 dark:brightness-110" : ""}`}
       onClick={() => {
         if (isButton) {
           createCategory();
         }
       }}
+      ref={drop}
     >
       <div
         className={`flex items-center justify-between ${
@@ -87,7 +105,8 @@ export default function Category({
       >
         {isButton ? (
           <div className="flex items-center gap-1">
-            <IconButton Icon={IoAdd} size={20} /> <span className="text-base">Add Category</span>{" "}
+            <IconButton Icon={IoAdd} size={20} />{" "}
+            <span className="text-base">Add Category</span>{" "}
           </div>
         ) : (
           <>
