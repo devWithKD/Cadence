@@ -101,3 +101,83 @@
     @apply outline-none rounded bg-slate-100 dark:bg-slate-600 primary-text dark:[color-scheme:dark];
   }
 }
+
+.sky-bg {
+  @apply bg-sky-400;
+}
+
+.rose-bg {
+  @apply bg-rose-400;
+}
+
+.green-bg {
+  @apply bg-green-400;
+}
+
+.slate-bg {
+  @apply bg-slate-400;
+}
+
+.teal-bg {
+  @apply bg-teal-400;
+}
+
+.yellow-bg {
+  @apply bg-yellow-400;
+}
+
+.indigo-bg {
+  @apply bg-indigo-400;
+}
+
+.blue-bg {
+  @apply bg-blue-400;
+}
+
+.purple-bg {
+  @apply bg-purple-400;
+}
+
+.pink-bg {
+  @apply bg-pink-400;
+}
+
+.sky-bg-secondary {
+  @apply bg-sky-100;
+}
+
+.rose-bg-secondary {
+  @apply bg-rose-100;
+}
+
+.green-bg-secondary {
+  @apply bg-green-100;
+}
+
+.slate-bg-secondary {
+  @apply bg-slate-100;
+}
+
+.teal-bg-secondary {
+  @apply bg-teal-100;
+}
+
+.yellow-bg-secondary {
+  @apply bg-yellow-100;
+}
+
+.indigo-bg-secondary {
+  @apply bg-indigo-100;
+}
+
+.blue-bg-secondary {
+  @apply bg-blue-100;
+}
+
+.purple-bg-secondary {
+  @apply bg-purple-100;
+}
+
+.pink-bg-secondary {
+  @apply bg-pink-100;
+}

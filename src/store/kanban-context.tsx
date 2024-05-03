@@ -78,8 +78,9 @@ function kanbanReducer(state: KanbanState, action: Action) {
     return {
       ...state,
       categories: state.categories.filter(
-        (category) => category.id != action.payload,
+        (category) => category.id != action.payload
       ),
+      cards: state.cards.filter((child) => child.parent != action.payload),
     };
   }
   return state;

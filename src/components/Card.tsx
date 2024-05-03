@@ -16,12 +16,10 @@ const Card = memo(function Card({ id }: { id: string }) {
 
   const enterEditMode = useCallback(() => {
     setEditMode(true);
-    console.log("open");
   }, []);
 
   const closeEditMode = useCallback(
     (updatedCard?: CardType) => {
-      console.log("close");
       if (updatedCard && !dash.isEqual(updatedCard, cardDetail)) {
         kanbanCtx.updateCard(updatedCard);
       }
