@@ -21,6 +21,7 @@ import TitleWithAction from "./TitleWithAction";
 import { FaTrash } from "react-icons/fa6";
 import dropdownWrapper from "./dropdownWrapper";
 import { v4 as uuid } from "uuid";
+import { createPortal } from "react-dom";
 
 const CategoryTitle = ({ catTitle }: { catTitle: string }) => {
   return <span className="cursor-pointer underline">{catTitle}</span>;
@@ -173,11 +174,12 @@ const CardWizard = memo(function CardWizard({
     };
   }, [handleClickOutSide]);
 
-  return (
-    <div className="fixed z-50 w-screen h-screen top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex justify-center items-center backdrop-blur-sm backdrop-brightness-75">
+  return createPortal(
+    <div className="fixed z-50 w-screen h-screen top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex justify-center items-center backdrop-blur-sm backdrop-brightness-75" draggable={false}>
       <div
         className="w-full lg:w-4/6 2xl:w-1/2 lg:aspect-[4/2] rounded-lg shadow-2xl shadow-slate-400 dark:shadow-slate-800 bg-slate-200 dark:bg-gradient-to-tr dark:from-slate-900 dark:to-slate-700 backdrop:backdrop-blur-sm dark:outline-slate-600 dark:outline outline-1 overflow-x-hidden relative py-6 px-4 lg:px-6"
         ref={clickableAreaRef}
+        draggable={false}
       >
         <div className="absolute top-4 right-4">
           <IconButton
@@ -345,7 +347,7 @@ const CardWizard = memo(function CardWizard({
           </div>
         </div>
       </div>
-    </div>
+    </div>, document.getElementById("modal")!
   );
 });
 
