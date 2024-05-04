@@ -40,7 +40,7 @@ export default function CategoryOpsBtn({
     return () => {
       document.removeEventListener("mousedown", handleOutSideClick);
     };
-  }, []);
+  });
 
   return (
     <div

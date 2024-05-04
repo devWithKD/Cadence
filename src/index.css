@@ -100,6 +100,10 @@
   .custom-input {
     @apply outline-none rounded bg-slate-100 dark:bg-slate-600 primary-text dark:[color-scheme:dark];
   }
+
+  .primary-bg {
+    @apply bg-gradient-to-tr from-slate-50 to-slate-300 dark:from-slate-900 dark:to-slate-700 font-poppins transition-all duration-300;
+  }
 }
 
 .sky-bg {
