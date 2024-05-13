@@ -7,26 +7,34 @@ import {
 import {
   ReactNode,
   createContext,
+  useCallback,
   useContext,
   useEffect,
   useState,
 } from "react";
 import { auth } from "../utils/firebase/firebase";
+import { createUserIfNotExist } from "../utils/firebase/user";
 
+type appMode = "demo" | "full" | undefined;
 interface authContextInterface {
   currentUser: User | null | undefined;
+  mode: appMode;
   authWithGoogle: () => void;
   authWithGithub: () => void;
+  setMode: (mode: appMode) => void;
   signOut: () => void;
 }
 
 const AuthContext = createContext<authContextInterface>({
   currentUser: null,
+  mode: undefined,
   authWithGoogle: () => {},
   authWithGithub: () => {},
+  setMode: () => {},
   signOut: () => {},
 });
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function useAuth() {
   return useContext(AuthContext);
 }
@@ -41,23 +49,34 @@ export default function AuthProvider({
 }) {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [mode, setMode] = useState<"demo" | "full">();
 
   function authWithGoogle() {
-    return signInWithPopup(auth, googleProvider);
+    return signInWithPopup(auth, googleProvider)
+      .then(createUserIfNotExist)
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
-  function authWithGithub() {
-    return signInWithPopup(auth, githubProvider);
-  }
+  const authWithGithub = useCallback(() => {
+    return signInWithPopup(auth, githubProvider)
+      .then(createUserIfNotExist)
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
-  function signOut() {
-    return auth.signOut();
-  }
+  const signOut = useCallback(() => auth.signOut(), []);
+
+  const setAppMode = useCallback((mode: appMode) => setMode(mode), []);
 
   const value = {
     currentUser,
+    mode,
     authWithGoogle,
     authWithGithub,
+    setMode: setAppMode,
     signOut,
   };
 
@@ -68,6 +87,10 @@ export default function AuthProvider({
     });
     return unsubscribe;
   }, []);
+
+  useEffect(() => {
+    if (currentUser != null) setAppMode("full");
+  }, [currentUser, setAppMode]);
   return (
     <AuthContext.Provider value={value}>
       {!loading && children}

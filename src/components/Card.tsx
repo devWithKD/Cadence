@@ -42,7 +42,7 @@ const Card = memo(function Card({ id }: { id: string }) {
       ref={drag}
     >
       <div className="w-full h-full px-2 py-3" onClick={enterEditMode}>
-        <span>{cardDetail.title}</span>
+        <span>{cardDetail.title!=""?cardDetail.title:"Untitled"}</span>
       </div>
       {editMode && (
         <CardWizard

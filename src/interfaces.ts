@@ -9,7 +9,7 @@ export interface CardType {
   parent: string;
   title: string;
   hasStart: boolean;
-  startDate?: Date|null;
+  startDate?: Date | null;
   hasDue: boolean;
   dueDate?: Date | null;
   description: string;
@@ -24,8 +24,15 @@ export interface CategoryType {
 }
 
 export interface KanbanState {
-  cards: Array<CardType>;
-  categories: Array<CategoryType>;
+  currentBoard: Board | null;
+  cards: CardType[];
+  categories: CategoryType[];
+}
+
+export interface Board {
+  title: string;
+  owner?: string;
+  uid: string;
 }
 
 export interface ThemeAction {

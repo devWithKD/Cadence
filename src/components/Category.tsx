@@ -102,7 +102,7 @@ const Category = memo(function Category({
   );
 
   const deleteCategory = useCallback(() => {
-    kanbanCtx.removrCategory(id as string);
+    kanbanCtx.removeCategory(id as string);
   }, [kanbanCtx, id]);
 
   const enterEditMode = useCallback(() => {
@@ -129,7 +129,7 @@ const Category = memo(function Category({
 
   return (
     <div
-      className={`min-w-80 w-80 min-h-8 h-fit rounded-2xl shadow-lg shadow-slate-300 dark:shadow-slate-700 ${
+      className={`min-w-80 w-80 min-h-8 max-h-full h-fit rounded-2xl shadow-lg shadow-slate-300 dark:shadow-slate-700 ${
         isButton
           ? "bg-gray-200 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-500 cursor-pointer transition duration-200"
           : `bg-slate-100 dark:bg-slate-600 ${color}`
@@ -170,7 +170,7 @@ const Category = memo(function Category({
                 ref={titleInputRef}
               />
             ) : (
-              <span className="select-none font-medium flex-1">{title}</span>
+              <span className="select-none font-semibold text-lg flex-1">{title}</span>
             )}
             <div className="flex gap-1 items-center">
               <IconButton
@@ -194,8 +194,13 @@ const Category = memo(function Category({
           </>
         )}
       </div>
-      {cards.length > 0 &&
-        cards.map((card) => <Card key={card.id} id={card.id} />)}
+      {cards.length > 0 && (
+        <div className="flex flex-col max-h-full overflow-auto gap-2 scroll-smooth scroll-px-6 scrollbar-thin scrollbar-track-slate-200 dark:scrollbar-track-slate-700 scrollbar-thumb-slate-300 dark:scrollbar-thumb-slate-600">
+          {cards.map((card) => (
+            <Card key={card.id} id={card.id} />
+          ))}
+        </div>
+      )}
       {cardCreationMode && (
         <CardCreationForm
           value={newCard.title}

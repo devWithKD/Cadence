@@ -1,16 +1,29 @@
 "use strict";
 
-import { ReactNode, createContext, useReducer } from "react";
-import { KanbanState, CategoryType, CardType } from "../interfaces";
+import {
+  ReactNode,
+  createContext,
+  useCallback,
+  useEffect,
+  useReducer,
+} from "react";
+import { KanbanState, CategoryType, CardType, Board } from "../interfaces";
 import { categories } from "../utils/categories";
 import { cards } from "../utils/cards";
+import { useAuth } from "./auth-context";
 
+interface KanbanData {
+  cards: CardType[];
+  categories: CategoryType[];
+}
 interface Action {
   type: string;
-  payload: CategoryType | CardType | string;
+  payload: CategoryType | CardType | string | KanbanData | Board | null;
 }
 
 interface KanbanContextInterface {
+  // Current Board
+  currentBoard: Board | null;
   // Main State
   cards: Array<CardType>;
   categories: Array<CategoryType>;
@@ -21,10 +34,14 @@ interface KanbanContextInterface {
   // CategoryType Methods
   addCategory: (category: CategoryType) => void;
   updateCategory: (category: CategoryType) => void;
-  removrCategory: (catID: string) => void;
+  removeCategory: (catID: string) => void;
+  // Set Board ID
+  setBoard: (board: Board | null) => void;
 }
 
 export const KanbanContext = createContext<KanbanContextInterface>({
+  // Current Board
+  currentBoard: null,
   // Main State
   cards: [],
   categories: [],
@@ -35,55 +52,76 @@ export const KanbanContext = createContext<KanbanContextInterface>({
   // CategoryType Methods
   addCategory: () => {},
   updateCategory: () => {},
-  removrCategory: () => {},
+  removeCategory: () => {},
+  // Set Board ID
+  setBoard: () => {},
 });
 
 function kanbanReducer(state: KanbanState, action: Action) {
-  if (action.type === "ADD_CARD") {
-    // Add CardType Logic
-    const cardsState: Array<CardType> = [...state.cards];
-    cardsState.push(action.payload as CardType);
-    return { ...state, cards: cardsState };
-  } else if (action.type === "UPDATE_CARD") {
-    // Update CardType Logic
-    const cardsState: Array<CardType> = [...state.cards];
-    const updatedArray = cardsState.map((card) => {
-      if (card.id === (action.payload as CardType).id) {
-        return action.payload as CardType;
-      } else return card;
-    });
-    return { ...state, cards: updatedArray };
-  } else if (action.type === "REMOVE_CARD") {
-    // Remove CardType Logic
-    return {
-      ...state,
-      cards: state.cards.filter((card) => card.id != action.payload),
-    };
-  } else if (action.type === "ADD_CATEGORY") {
-    // Add CardType Logic
-    const categoriesState = [...state.categories];
-    categoriesState.push(action.payload as CategoryType);
-    return { ...state, categories: categoriesState };
-  } else if (action.type === "UPDATE_CATEGORY") {
-    // Update CardType Logic
-    const categoriesState = [...state.categories];
-    const updatedCats = categoriesState.map((category) => {
-      if (category.id === (action.payload as CategoryType).id) {
-        return action.payload as CategoryType;
-      } else return category;
-    });
-    return { ...state, categories: updatedCats };
-  } else if (action.type === "REMOVE_CATEGORY") {
-    // Remove CardType Logic
-    return {
-      ...state,
-      categories: state.categories.filter(
-        (category) => category.id != action.payload
-      ),
-      cards: state.cards.filter((child) => child.parent != action.payload),
-    };
+  let cardsState: Array<CardType> = [...state.cards];
+  let categoryState: Array<CategoryType> = [...state.categories];
+  let boardState: Board | null = state.currentBoard;
+
+  switch (action.type) {
+    case "ADD_CARD":
+      cardsState.push(action.payload as CardType);
+      break;
+
+    case "ADD_CATEGORY":
+      categoryState.push(action.payload as CategoryType);
+      break;
+
+    case "UPDATE_CARD":
+      cardsState = cardsState.map((card) => {
+        if (card.id === (action.payload as CardType).id) {
+          return action.payload as CardType;
+        }
+        return card;
+      });
+      break;
+
+    case "UPDATE_CATEGORY":
+      categoryState = categoryState.map((cat) => {
+        if (cat.id === (action.payload as CategoryType).id) {
+          return action.payload as CategoryType;
+        }
+        return cat;
+      });
+      break;
+
+    case "REMOVE_CARD":
+      cardsState = cardsState.filter((card) => card.id != action.payload);
+      break;
+
+    case "REMOVE_CATEGORY":
+      categoryState = categoryState.filter((cat) => cat.id != action.payload);
+      break;
+
+    case "SET_DATA":
+      if (
+        action.payload &&
+        typeof action.payload == "object" &&
+        "cards" in action.payload &&
+        "categories" in action.payload
+      ) {
+        cardsState = action.payload.cards;
+        categoryState = action.payload.categories;
+      }
+      break;
+
+    case "SET_BOARD":
+      boardState = action.payload as Board | null;
+      break;
+
+    default:
+      break;
   }
-  return state;
+
+  return {
+    cards: cardsState,
+    categories: categoryState,
+    currentBoard: boardState,
+  };
 }
 
 export default function KanbanContextProvider({
@@ -92,38 +130,47 @@ export default function KanbanContextProvider({
   children: ReactNode;
 }) {
   const [kanbanState, kanbanDispatch] = useReducer(kanbanReducer, {
-    cards: cards,
-    categories: categories,
+    currentBoard: null,
+    cards: [],
+    categories: [],
   });
 
-  function addCardHandler(card: CardType) {
+  const { mode } = useAuth();
+
+  const addCardHandler = useCallback((card: CardType) => {
     kanbanDispatch({
       type: "ADD_CARD",
       payload: card,
     });
-  }
+  }, []);
 
-  function addCategoryHandler(category: CategoryType) {
+  const addCategoryHandler = useCallback((category: CategoryType) => {
     kanbanDispatch({ type: "ADD_CATEGORY", payload: category });
-  }
+  }, []);
 
-  function updateCardHandler(card: CardType) {
+  const updateCardHandler = useCallback((card: CardType) => {
     kanbanDispatch({ type: "UPDATE_CARD", payload: card });
-  }
+  }, []);
 
-  function updateCategoryHandler(category: CategoryType) {
+  const updateCategoryHandler = useCallback((category: CategoryType) => {
     kanbanDispatch({ type: "UPDATE_CATEGORY", payload: category });
-  }
+  }, []);
 
-  function removeCardHandler(cardID: string) {
+  const removeCardHandler = useCallback((cardID: string) => {
     kanbanDispatch({ type: "REMOVE_CARD", payload: cardID });
-  }
+  }, []);
 
-  function removeCategoryHandler(catID: string) {
+  const removeCategoryHandler = useCallback((catID: string) => {
     kanbanDispatch({ type: "REMOVE_CATEGORY", payload: catID });
-  }
+  }, []);
+
+  const setBoard = useCallback((board: Board | null) => {
+    kanbanDispatch({ type: "SET_BOARD", payload: board });
+  }, []);
 
   const ctxValue = {
+    // Current Board
+    currentBoard: kanbanState.currentBoard,
     // Main State
     cards: kanbanState.cards,
     categories: kanbanState.categories,
@@ -134,8 +181,17 @@ export default function KanbanContextProvider({
     // CategoryType Methods
     addCategory: addCategoryHandler,
     updateCategory: updateCategoryHandler,
-    removrCategory: removeCategoryHandler,
+    removeCategory: removeCategoryHandler,
+    // Set Board ID
+    setBoard,
   };
+
+  useEffect(() => {
+    if (mode == "demo") {
+      kanbanDispatch({ type: "SET_DATA", payload: { cards, categories } });
+    }
+  }, [mode]);
+
   return (
     <KanbanContext.Provider value={ctxValue}>{children}</KanbanContext.Provider>
   );
