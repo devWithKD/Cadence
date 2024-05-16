@@ -1,5 +1,4 @@
 import {
-  DocumentData,
   collection,
   deleteDoc,
   doc,
@@ -10,11 +9,7 @@ import {
   where,
 } from "firebase/firestore";
 import { db } from "./firebase";
-import { Board } from "../../interfaces";
-
-interface docData extends DocumentData {
-  uid: string;
-}
+import { Board, docData } from "../../interfaces";
 
 export const getUserBoards = async (userID: string) => {
   const boardsQuery = query(

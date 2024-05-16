@@ -11,6 +11,18 @@ import { KanbanState, CategoryType, CardType, Board } from "../interfaces";
 import { categories } from "../utils/categories";
 import { cards } from "../utils/cards";
 import { useAuth } from "./auth-context";
+import {
+  addCardFirestore,
+  deleteCardFireStore,
+  getCardsFromBoard,
+  updateCardFirestore,
+} from "../utils/firebase/cards_controller";
+import {
+  addCategoryFirestore,
+  deleteCategoryFireStore,
+  getCategoriesFromBoard,
+  updateCategoryFirestore,
+} from "../utils/firebase/categories_controller";
 
 interface KanbanData {
   cards: CardType[];
@@ -35,7 +47,7 @@ interface KanbanContextInterface {
   addCategory: (category: CategoryType) => void;
   updateCategory: (category: CategoryType) => void;
   removeCategory: (catID: string) => void;
-  // Set Board ID
+  // Set Board uid
   setBoard: (board: Board | null) => void;
 }
 
@@ -53,7 +65,7 @@ export const KanbanContext = createContext<KanbanContextInterface>({
   addCategory: () => {},
   updateCategory: () => {},
   removeCategory: () => {},
-  // Set Board ID
+  // Set Board uid
   setBoard: () => {},
 });
 
@@ -73,7 +85,7 @@ function kanbanReducer(state: KanbanState, action: Action) {
 
     case "UPDATE_CARD":
       cardsState = cardsState.map((card) => {
-        if (card.id === (action.payload as CardType).id) {
+        if (card.uid === (action.payload as CardType).uid) {
           return action.payload as CardType;
         }
         return card;
@@ -82,7 +94,7 @@ function kanbanReducer(state: KanbanState, action: Action) {
 
     case "UPDATE_CATEGORY":
       categoryState = categoryState.map((cat) => {
-        if (cat.id === (action.payload as CategoryType).id) {
+        if (cat.uid === (action.payload as CategoryType).uid) {
           return action.payload as CategoryType;
         }
         return cat;
@@ -90,11 +102,11 @@ function kanbanReducer(state: KanbanState, action: Action) {
       break;
 
     case "REMOVE_CARD":
-      cardsState = cardsState.filter((card) => card.id != action.payload);
+      cardsState = cardsState.filter((card) => card.uid != action.payload);
       break;
 
     case "REMOVE_CATEGORY":
-      categoryState = categoryState.filter((cat) => cat.id != action.payload);
+      categoryState = categoryState.filter((cat) => cat.uid != action.payload);
       break;
 
     case "SET_DATA":
@@ -137,31 +149,73 @@ export default function KanbanContextProvider({
 
   const { mode } = useAuth();
 
-  const addCardHandler = useCallback((card: CardType) => {
-    kanbanDispatch({
-      type: "ADD_CARD",
-      payload: card,
-    });
-  }, []);
+  const addCardHandler = useCallback(
+    async (card: CardType) => {
+      kanbanDispatch({
+        type: "ADD_CARD",
+        payload: card,
+      });
+      try {
+        await addCardFirestore(card, kanbanState.currentBoard!.uid);
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    [kanbanState.currentBoard]
+  );
 
-  const addCategoryHandler = useCallback((category: CategoryType) => {
-    kanbanDispatch({ type: "ADD_CATEGORY", payload: category });
-  }, []);
+  const addCategoryHandler = useCallback(
+    async (category: CategoryType) => {
+      kanbanDispatch({ type: "ADD_CATEGORY", payload: category });
+      try {
+        await addCategoryFirestore(category, kanbanState.currentBoard!.uid);
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    [kanbanState.currentBoard]
+  );
 
-  const updateCardHandler = useCallback((card: CardType) => {
-    kanbanDispatch({ type: "UPDATE_CARD", payload: card });
-  }, []);
+  const updateCardHandler = useCallback(
+    async (card: CardType) => {
+      kanbanDispatch({ type: "UPDATE_CARD", payload: card });
+      try {
+        await updateCardFirestore(card, kanbanState.currentBoard!.uid);
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    [kanbanState.currentBoard]
+  );
 
-  const updateCategoryHandler = useCallback((category: CategoryType) => {
-    kanbanDispatch({ type: "UPDATE_CATEGORY", payload: category });
-  }, []);
+  const updateCategoryHandler = useCallback(
+    async (category: CategoryType) => {
+      kanbanDispatch({ type: "UPDATE_CATEGORY", payload: category });
+      try {
+        await updateCategoryFirestore(category, kanbanState.currentBoard!.uid);
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    [kanbanState.currentBoard]
+  );
 
-  const removeCardHandler = useCallback((cardID: string) => {
+  const removeCardHandler = useCallback(async (cardID: string) => {
     kanbanDispatch({ type: "REMOVE_CARD", payload: cardID });
+    try {
+      await deleteCardFireStore(cardID);
+    } catch (error) {
+      console.error(error);
+    }
   }, []);
 
-  const removeCategoryHandler = useCallback((catID: string) => {
+  const removeCategoryHandler = useCallback(async (catID: string) => {
     kanbanDispatch({ type: "REMOVE_CATEGORY", payload: catID });
+    try {
+      await deleteCategoryFireStore(catID);
+    } catch (error) {
+      console.error(error);
+    }
   }, []);
 
   const setBoard = useCallback((board: Board | null) => {
@@ -182,15 +236,27 @@ export default function KanbanContextProvider({
     addCategory: addCategoryHandler,
     updateCategory: updateCategoryHandler,
     removeCategory: removeCategoryHandler,
-    // Set Board ID
+    // Set Board uid
     setBoard,
   };
 
   useEffect(() => {
+    const getBoardDataFromFirestore = async () => {
+      const boardCards = await getCardsFromBoard(kanbanState.currentBoard!.uid);
+      const boardCategories = await getCategoriesFromBoard(
+        kanbanState.currentBoard!.uid
+      );
+      kanbanDispatch({
+        type: "SET_DATA",
+        payload: { cards: boardCards, categories: boardCategories },
+      });
+    };
     if (mode == "demo") {
       kanbanDispatch({ type: "SET_DATA", payload: { cards, categories } });
+    } else if (kanbanState.currentBoard != null) {
+      getBoardDataFromFirestore();
     }
-  }, [mode]);
+  }, [kanbanState.currentBoard, mode]);
 
   return (
     <KanbanContext.Provider value={ctxValue}>{children}</KanbanContext.Provider>

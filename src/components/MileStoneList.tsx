@@ -27,7 +27,7 @@ const MileStoneList = memo(function MileStoneList({
       setMileStoneList((list) => {
         if (inputRef.current != null) {
           const newMileStone: MileStone = {
-            id: uuid(),
+            uid: uuid(),
             status: false,
             title: inputRef.current.value,
           };
@@ -68,7 +68,7 @@ const MileStoneList = memo(function MileStoneList({
             onChange={(e) => {
               setMileStoneList((prvList) => {
                 const updatedList = prvList.map((ms) => {
-                  if (ms.id == mileStone.id) {
+                  if (ms.uid == mileStone.uid) {
                     ms.status = e.target.checked;
                     return ms;
                   }
@@ -77,16 +77,16 @@ const MileStoneList = memo(function MileStoneList({
                 return updatedList;
               });
             }}
-            key={mileStone.id}
-            onDelete={(id) => {
+            key={mileStone.uid}
+            onDelete={(uid) => {
               setMileStoneList((list) => {
-                return list.filter((ms) => ms.id != id);
+                return list.filter((ms) => ms.uid != uid);
               });
             }}
             onSave={(mileStone) => {
               setMileStoneList((list) =>
                 list.map((ms) => {
-                  if (ms.id === mileStone.id) return mileStone;
+                  if (ms.uid === mileStone.uid) return mileStone;
                   else return ms;
                 })
               );

@@ -20,7 +20,7 @@ export default function dropdownWrapper<T>(
     const [showOps, setShowOps] = useState<boolean>(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
     const originRef = useRef<HTMLDivElement>(null);
-    const categoryRef = useRef<string>(categories[0].id);
+    const categoryRef = useRef<string>(categories[0].uid);
 
     const onChangeHandler = useCallback((e: ChangeEvent<HTMLSelectElement>) => {
       categoryRef.current = e.target.value;
@@ -92,7 +92,7 @@ export default function dropdownWrapper<T>(
                 >
                   {categories.map((cat) => {
                     return (
-                      <option key={cat.id} value={cat.id}>
+                      <option key={cat.uid} value={cat.uid}>
                         {cat.title}
                       </option>
                     );

@@ -1,11 +1,13 @@
+import { DocumentData } from "firebase/firestore";
+
 export interface MileStone {
-  id: string;
+  uid: string;
   title: string;
   status: boolean;
 }
 
 export interface CardType {
-  id: string;
+  uid: string;
   parent: string;
   title: string;
   hasStart: boolean;
@@ -18,7 +20,7 @@ export interface CardType {
 }
 
 export interface CategoryType {
-  id: string;
+  uid: string;
   title: string;
   color: string;
 }
@@ -46,3 +48,7 @@ export interface ThemeState {
 export const ItemTypes = {
   CARD: "card",
 };
+
+export interface docData extends DocumentData {
+  uid: string;
+}

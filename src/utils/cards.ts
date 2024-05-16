@@ -1,6 +1,6 @@
 export const cards = [
   {
-    id: "task-123",
+    uid: "task-123",
     parent: "uuid-1",
     title: "Write a report on quarterly sales",
     hasStart: false,
@@ -10,24 +10,24 @@ export const cards = [
     hasCheckList: true,
     checkList: [
       {
-        id: "milestone-1",
+        uid: "milestone-1",
         title: "Gather sales data",
         status: false,
       },
       {
-        id: "milestone-2",
+        uid: "milestone-2",
         title: "Analyze data and create charts",
         status: false,
       },
       {
-        id: "milestone-3",
+        uid: "milestone-3",
         title: "Write report and format",
         status: false,
       },
     ],
   },
   {
-    id: "task-456",
+    uid: "task-456",
     parent: "uuid-1",
     title: "Review marketing campaign performance",
     hasStart: false,
@@ -37,24 +37,24 @@ export const cards = [
     hasCheckList: true,
     checkList: [
       {
-        id: "milestone-4",
+        uid: "milestone-4",
         title: "Collect campaign data",
         status: false,
       },
       {
-        id: "milestone-5",
+        uid: "milestone-5",
         title: "Evaluate click-through rate and conversions",
         status: false,
       },
       {
-        id: "milestone-6",
+        uid: "milestone-6",
         title: "Develop recommendations for optimization",
         status: false,
       },
     ],
   },
   {
-    id: "task-789",
+    uid: "task-789",
     parent: "uuid-1",
     title: "Plan next quarter's social media strategy",
     hasStart: false,
@@ -64,24 +64,24 @@ export const cards = [
     hasCheckList: true,
     checkList: [
       {
-        id: "milestone-7",
+        uid: "milestone-7",
         title: "Identify target audience demographics",
         status: false,
       },
       {
-        id: "milestone-8",
+        uid: "milestone-8",
         title: "Research trending topics and content formats",
         status: false,
       },
       {
-        id: "milestone-9",
+        uid: "milestone-9",
         title: "Create social media content calendar",
         status: false,
       },
     ],
   },
   {
-    id: "task-010",
+    uid: "task-010",
     parent: "uuid-1",
     title: "Follow up on outstanding client queries",
     hasStart: false,
@@ -92,7 +92,7 @@ export const cards = [
     checkList: null,
   },
   {
-    id: "task-XYZ",
+    uid: "task-XYZ",
     parent: "uuid-1",
     title: "Onboard new team member",
     hasStart: false,
@@ -102,17 +102,17 @@ export const cards = [
     hasCheckList: true,
     checkList: [
       {
-        id: "milestone-10",
+        uid: "milestone-10",
         title: "Prepare welcome kit and onboarding materials",
         status: false,
       },
       {
-        id: "milestone-11",
+        uid: "milestone-11",
         title: "Schedule introductory meetings with team members",
         status: false,
       },
       {
-        id: "milestone-12",
+        uid: "milestone-12",
         title: "Grant access to tools and systems",
         status: false,
       },

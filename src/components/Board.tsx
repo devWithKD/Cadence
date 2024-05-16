@@ -27,11 +27,11 @@ export default function Board() {
         {kanbanCtx.categories.length > 0
           ? kanbanCtx.categories.map((category) => (
               <Category
-                id={category.id}
+                uid={category.uid}
                 isButton={false}
                 title={category.title}
                 color={category.color}
-                key={category.id}
+                key={category.uid}
               />
             ))
           : ""}
