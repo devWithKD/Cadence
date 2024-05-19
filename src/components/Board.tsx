@@ -4,6 +4,7 @@ import Category from "./Category";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { TouchBackend } from "react-dnd-touch-backend";
+import { AiOutlineLoading } from "react-icons/ai";
 
 export default function Board() {
   const kanbanCtx = useContext(KanbanContext);
@@ -23,20 +24,26 @@ export default function Board() {
 
   return (
     <DndProvider backend={backend}>
-      <div className="h-full flex flex-nowrap overflow-auto py-4 scroll-smooth scroll-px-6 gap-4 scrollbar-thin scrollbar-track-slate-200 dark:scrollbar-track-slate-700 scrollbar-thumb-slate-300 dark:scrollbar-thumb-slate-600">
-        {kanbanCtx.categories.length > 0
-          ? kanbanCtx.categories.map((category) => (
-              <Category
-                uid={category.uid}
-                isButton={false}
-                title={category.title}
-                color={category.color}
-                key={category.uid}
-              />
-            ))
-          : ""}
-        <Category isButton={true} />
-      </div>
+      {!kanbanCtx.loading ? (
+        <div className="h-full flex flex-nowrap overflow-auto py-4 scroll-smooth scroll-px-6 gap-4 scrollbar-thin scrollbar-track-slate-200 dark:scrollbar-track-slate-700 scrollbar-thumb-slate-300 dark:scrollbar-thumb-slate-600">
+          {kanbanCtx.categories.length > 0
+            ? kanbanCtx.categories.map((category) => (
+                <Category
+                  uid={category.uid}
+                  isButton={false}
+                  title={category.title}
+                  color={category.color}
+                  key={category.uid}
+                />
+              ))
+            : ""}
+          <Category isButton={true} />
+        </div>
+      ) : (
+        <div className="w-full h-full flex justify-center items-center secondary-text">
+          <AiOutlineLoading size={72} className="animate-spin" />
+        </div>
+      )}
     </DndProvider>
   );
 }

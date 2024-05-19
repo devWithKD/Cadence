@@ -6,6 +6,7 @@ import {
   useCallback,
   useEffect,
   useReducer,
+  useState,
 } from "react";
 import { KanbanState, CategoryType, CardType, Board } from "../interfaces";
 import { categories } from "../utils/categories";
@@ -39,6 +40,8 @@ interface KanbanContextInterface {
   // Main State
   cards: Array<CardType>;
   categories: Array<CategoryType>;
+  // Data Loading State
+  loading: boolean;
   // CardType Methods
   addCard: (card: CardType) => void;
   updateCard: (card: CardType) => void;
@@ -57,6 +60,8 @@ export const KanbanContext = createContext<KanbanContextInterface>({
   // Main State
   cards: [],
   categories: [],
+  // loading state
+  loading: false,
   // CardType Methods
   addCard: () => {},
   updateCard: () => {},
@@ -146,6 +151,7 @@ export default function KanbanContextProvider({
     cards: [],
     categories: [],
   });
+  const [dataLoading, setDataLoading] = useState<boolean>(false);
 
   const { mode } = useAuth();
 
@@ -228,6 +234,8 @@ export default function KanbanContextProvider({
     // Main State
     cards: kanbanState.cards,
     categories: kanbanState.categories,
+    // Loading State
+    loading: dataLoading,
     // CardType Methods
     addCard: addCardHandler,
     updateCard: updateCardHandler,
@@ -242,17 +250,28 @@ export default function KanbanContextProvider({
 
   useEffect(() => {
     const getBoardDataFromFirestore = async () => {
-      const boardCards = await getCardsFromBoard(kanbanState.currentBoard!.uid);
-      const boardCategories = await getCategoriesFromBoard(
-        kanbanState.currentBoard!.uid
-      );
-      kanbanDispatch({
-        type: "SET_DATA",
-        payload: { cards: boardCards, categories: boardCategories },
-      });
+      setDataLoading(true);
+      try {
+        const boardCards = await getCardsFromBoard(
+          kanbanState.currentBoard!.uid
+        );
+        const boardCategories = await getCategoriesFromBoard(
+          kanbanState.currentBoard!.uid
+        );
+        kanbanDispatch({
+          type: "SET_DATA",
+          payload: { cards: boardCards, categories: boardCategories },
+        });
+      } catch (error) {
+        console.error(error);
+      }
+      setDataLoading(false);
     };
     if (mode == "demo") {
-      kanbanDispatch({ type: "SET_DATA", payload: { cards, categories } });
+      kanbanDispatch({
+        type: "SET_DATA",
+        payload: { cards, categories },
+      });
     } else if (kanbanState.currentBoard != null) {
       getBoardDataFromFirestore();
     }

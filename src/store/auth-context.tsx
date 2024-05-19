@@ -15,7 +15,7 @@ import {
 import { auth } from "../utils/firebase/firebase";
 import { createUserIfNotExist } from "../utils/firebase/user";
 
-type appMode = "demo" | "full" | undefined;
+type appMode = "demo" | "full";
 interface authContextInterface {
   currentUser: User | null | undefined;
   mode: appMode;
@@ -27,7 +27,7 @@ interface authContextInterface {
 
 const AuthContext = createContext<authContextInterface>({
   currentUser: null,
-  mode: undefined,
+  mode: "demo",
   authWithGoogle: () => {},
   authWithGithub: () => {},
   setMode: () => {},
@@ -49,7 +49,9 @@ export default function AuthProvider({
 }) {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  const [mode, setMode] = useState<"demo" | "full">();
+  const [mode, setMode] = useState<"demo" | "full">(() =>
+    currentUser == null ? "demo" : "full"
+  );
 
   function authWithGoogle() {
     return signInWithPopup(auth, googleProvider)

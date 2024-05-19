@@ -17,7 +17,6 @@ import CardCreationForm from "./CardCreationForm";
 import Card from "./Card";
 import { useDrop } from "react-dnd";
 import CategoryOpsBtn from "./CategoryOptionBtn";
-import useDebounce from "../hooks/useDebounce";
 
 const emptyCard: CardType = {
   uid: "",
@@ -59,8 +58,6 @@ const Category = memo(function Category({
   const [editMode, setEditMOde] = useState(false);
   const [catTitle, setCatTitle] = useState(title as string);
 
-  const debouncedTitle = useDebounce(catTitle);
-
   const addCardInputRef = useRef<HTMLInputElement>(null);
 
   const handleCreateCardBtn = useCallback(function handleCreateCardBtn() {
@@ -98,7 +95,7 @@ const Category = memo(function Category({
       const updatedCat = { ...category, color: col };
       kanbanCtx.updateCategory(updatedCat);
     },
-    [kanbanCtx]
+    [category, kanbanCtx]
   );
 
   const deleteCategory = useCallback(() => {
@@ -115,12 +112,12 @@ const Category = memo(function Category({
     collect: (monitor) => ({ isOver: !!monitor.isOver({ shallow: true }) }),
   }));
 
-  useEffect(() => {
-    if (debouncedTitle && debouncedTitle.length > 0) {
-      const updatedCat = { ...category, title: debouncedTitle };
-      kanbanCtx.updateCategory(updatedCat);
-    }
-  }, [debouncedTitle]);
+  // useEffect(() => {
+  //   if (debouncedTitle && debouncedTitle.length > 0) {
+  //     const updatedCat = { ...category, title: debouncedTitle };
+  //     kanbanCtx.updateCategory(updatedCat);
+  //   }
+  // }, [category, debouncedTitle, kanbanCtx]);
 
   useEffect(() => {
     if (editMode && titleInputRef.current != null) {
@@ -166,6 +163,7 @@ const Category = memo(function Category({
                 }}
                 onBlur={() => {
                   setEditMOde(false);
+                  kanbanCtx.updateCategory(category);
                 }}
                 size={catTitle.length + 1}
                 className="custom-input bg-transparent w-full"

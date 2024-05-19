@@ -1,19 +1,26 @@
 import { useAuth } from "../store/auth-context";
 import Button from "../components/Button";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa6";
 import ThemeToggleButton from "../components/ThemeToggleButton";
+import { useCallback } from "react";
 
 export default function AuthPage() {
-  const { currentUser, authWithGoogle, authWithGithub, setMode, mode } =
-    useAuth();
+  const { currentUser, authWithGoogle, authWithGithub, setMode } = useAuth();
+  const navigate = useNavigate();
+
+  const openDemo = useCallback(() => {
+    setMode("demo");
+    navigate("/board");
+  }, [navigate, setMode]);
 
   return (
     <>
-      {currentUser || mode == "demo" ? (
+      {currentUser != null ? (
         <Navigate to="/board" />
       ) : (
+        // <div></div>
         <div className="w-screen h-screen flex flex-col justify-center items-center relative overflow-hidden primary-bg">
           <div className="w-10/12 xl:w-3/4 flex flex-col xl:flex-row gap-4 md:gap-6 justify-evenly items-center">
             <div className="w-full xl:w-4/6 flex flex-col gap-3 ">
@@ -25,7 +32,7 @@ export default function AuthPage() {
                 Tamer!
               </p>
             </div>
-            <div className="flex-1 flex xl:w-full flex-col md:flex-row xl:flex-col justify-center items-center gap-4 secondary-text">
+            <div className="flex-1 flex xl:w-full px-5 flex-col md:flex-row xl:flex-col justify-center items-center gap-4 secondary-text">
               {/* <div className="flex w-full flex-col gap-4 justify-center items-center"> */}
               <Button
                 Icon={FcGoogle}
@@ -43,8 +50,8 @@ export default function AuthPage() {
               />
               {/* </div> */}
               <Button
-                title="Try out TaskTamer"
-                onClick={() => setMode("demo")}
+                title="Try out Cadence"
+                onClick={openDemo}
                 className="xl:min-w-full text-nowrap text-lg font-medium drop-shadow-md"
               />
             </div>
