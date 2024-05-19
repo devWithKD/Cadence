@@ -163,7 +163,8 @@ const Category = memo(function Category({
                 }}
                 onBlur={() => {
                   setEditMOde(false);
-                  kanbanCtx.updateCategory(category);
+                  const updatedCat = { ...category, title: catTitle };
+                  kanbanCtx.updateCategory(updatedCat);
                 }}
                 size={catTitle.length + 1}
                 className="custom-input bg-transparent w-full"
