@@ -41,7 +41,7 @@ export default function Textarea({
       window.removeEventListener("resize", handleWindowResize);
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  });
 
   return (
     <textarea

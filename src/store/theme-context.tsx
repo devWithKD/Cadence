@@ -20,9 +20,15 @@ export default function ThemeContextProvider({
 }: {
   children: ReactNode;
 }) {
-  const [themeState, themeDispatch] = useReducer(themeReducer, {
-    theme: "light",
-  });
+  const [themeState, themeDispatch] = useReducer(
+    themeReducer,
+    { theme: "light" },
+    () => {
+      const themePref = window.matchMedia("(prefers-color-scheme: dark)");
+      if (themePref.matches) return { theme: "dark" };
+      else return { theme: "light" };
+    }
+  );
 
   function handleThemeToggle() {
     themeDispatch({ type: "TOGGLE_THEME" });

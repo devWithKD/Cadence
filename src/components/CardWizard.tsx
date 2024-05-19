@@ -60,7 +60,7 @@ const CardWizard = memo(function CardWizard({
       const newCard: CardType = {
         ...(wizardData.data as CardType),
         parent: catID,
-        id: uuid(),
+        uid: uuid(),
       };
       kanbanCtx.addCard(newCard);
     },
@@ -72,7 +72,7 @@ const CardWizard = memo(function CardWizard({
       setWizardData((prvData) => {
         const card = { ...(prvData.data as CardType) };
         card.parent = catID;
-        const parentCat = categories.filter((cat) => cat.id == catID)[0];
+        const parentCat = categories.filter((cat) => cat.uid == catID)[0];
         return { ...prvData, data: card, parent: parentCat };
       });
       movedRef.current = true;
@@ -338,7 +338,7 @@ const CardWizard = memo(function CardWizard({
               <DeleteTimerBtn
                 timeOut={10}
                 onDelete={() => {
-                  kanbanCtx.removeCard(wizardData.data.id);
+                  kanbanCtx.removeCard(wizardData.data.uid);
                   onClose();
                 }}
                 ref={deleteTimerRef}

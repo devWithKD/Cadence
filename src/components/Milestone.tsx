@@ -11,7 +11,7 @@ const Milestone = memo(function Milestone({
   onDelete,
   onSave,
 }: {
-  onDelete: (id: string) => void;
+  onDelete: (uid: string) => void;
   onSave: (updatedMS: MileStone) => void;
   mileStone: MileStone;
   onChange: React.ChangeEventHandler<HTMLInputElement>;
@@ -37,7 +37,7 @@ const Milestone = memo(function Milestone({
       <div className="flex gap-2 items-center">
         <input
           type="checkbox"
-          id={mileStone.id}
+          id={mileStone.uid}
           checked={mileStone.status}
           onChange={onChange}
         />
@@ -57,7 +57,7 @@ const Milestone = memo(function Milestone({
             className={`primary-text font-semibold ${
               mileStone.status ? "line-through" : ""
             }`}
-            htmlFor={mileStone.id}
+            htmlFor={mileStone.uid}
           >
             {mileStone.title}
           </label>
@@ -94,7 +94,7 @@ const Milestone = memo(function Milestone({
             Icon={FaTrash}
             className="rounded-full hover:bg-slate-400 p-1.5 primary-text"
             size={16}
-            onClick={() => onDelete(mileStone.id)}
+            onClick={() => onDelete(mileStone.uid)}
           />{" "}
         </div>
       }

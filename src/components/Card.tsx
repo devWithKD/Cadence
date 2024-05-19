@@ -8,9 +8,9 @@ import { ItemTypes } from "../interfaces";
 
 const Card = memo(function Card({ id }: { id: string }) {
   const kanbanCtx = useContext(KanbanContext);
-  const cardDetail = kanbanCtx.cards.filter((card) => card.id == id)[0];
+  const cardDetail = kanbanCtx.cards.filter((card) => card.uid == id)[0];
   const parent = kanbanCtx.categories.filter(
-    (cat) => cat.id === cardDetail.parent
+    (cat) => cat.uid === cardDetail.parent
   )[0];
   const [editMode, setEditMode] = useState<boolean>(false);
 
@@ -42,7 +42,7 @@ const Card = memo(function Card({ id }: { id: string }) {
       ref={drag}
     >
       <div className="w-full h-full px-2 py-3" onClick={enterEditMode}>
-        <span>{cardDetail.title}</span>
+        <span>{cardDetail.title!=""?cardDetail.title:"Untitled"}</span>
       </div>
       {editMode && (
         <CardWizard

@@ -2,23 +2,23 @@ import { v4 as uuid } from "uuid";
 
 export const categories = [
   {
-    //  id: uuid(),
-    id: "uuid-1",
+    //  uid: uuid(),
+    uid: "uuid-1",
     title: "To-Do",
     color: "slate",
   },
   {
-    id: uuid(),
+    uid: uuid(),
     title: "In Progress",
     color: "yellow",
   },
   {
-    id: uuid(),
+    uid: uuid(),
     title: "Done",
     color: "green",
   },
   {
-    id: uuid(),
+    uid: uuid(),
     title: "Review",
     color: "indigo",
   },

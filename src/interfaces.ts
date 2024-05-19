@@ -1,15 +1,17 @@
+import { DocumentData } from "firebase/firestore";
+
 export interface MileStone {
-  id: string;
+  uid: string;
   title: string;
   status: boolean;
 }
 
 export interface CardType {
-  id: string;
+  uid: string;
   parent: string;
   title: string;
   hasStart: boolean;
-  startDate?: Date|null;
+  startDate?: Date | null;
   hasDue: boolean;
   dueDate?: Date | null;
   description: string;
@@ -18,14 +20,21 @@ export interface CardType {
 }
 
 export interface CategoryType {
-  id: string;
+  uid: string;
   title: string;
   color: string;
 }
 
 export interface KanbanState {
-  cards: Array<CardType>;
-  categories: Array<CategoryType>;
+  currentBoard: Board | null;
+  cards: CardType[];
+  categories: CategoryType[];
+}
+
+export interface Board {
+  title: string;
+  owner?: string;
+  uid: string;
 }
 
 export interface ThemeAction {
@@ -39,3 +48,7 @@ export interface ThemeState {
 export const ItemTypes = {
   CARD: "card",
 };
+
+export interface docData extends DocumentData {
+  uid: string;
+}

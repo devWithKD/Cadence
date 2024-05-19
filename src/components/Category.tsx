@@ -17,10 +17,9 @@ import CardCreationForm from "./CardCreationForm";
 import Card from "./Card";
 import { useDrop } from "react-dnd";
 import CategoryOpsBtn from "./CategoryOptionBtn";
-import useDebounce from "../hooks/useDebounce";
 
 const emptyCard: CardType = {
-  id: "",
+  uid: "",
   description: "",
   hasDue: false,
   hasStart: false,
@@ -30,12 +29,12 @@ const emptyCard: CardType = {
 };
 
 const Category = memo(function Category({
-  id,
+  uid,
   isButton,
   title,
   color,
 }: {
-  id?: string;
+  uid?: string;
   isButton: boolean;
   title?: string;
   color?: string;
@@ -44,13 +43,13 @@ const Category = memo(function Category({
   // const tooltipCtx = useContext(ToolTipContext);
   function createCategory() {
     kanbanCtx.addCategory({
-      id: uuid(),
+      uid: uuid(),
       title: "Untitled",
       color: "slate",
     });
   }
-  const cards = kanbanCtx.cards.filter((card) => card.parent === id);
-  const category = kanbanCtx.categories.filter((cat) => cat.id == id)[0];
+  const cards = kanbanCtx.cards.filter((card) => card.parent === uid);
+  const category = kanbanCtx.categories.filter((cat) => cat.uid == uid)[0];
 
   const titleInputRef = useRef<HTMLInputElement>(null);
 
@@ -58,8 +57,6 @@ const Category = memo(function Category({
   const [newCard, setNewCard] = useState({ ...emptyCard });
   const [editMode, setEditMOde] = useState(false);
   const [catTitle, setCatTitle] = useState(title as string);
-
-  const debouncedTitle = useDebounce(catTitle);
 
   const addCardInputRef = useRef<HTMLInputElement>(null);
 
@@ -72,9 +69,9 @@ const Category = memo(function Category({
   }, []);
 
   const createCard = useCallback(() => {
-    kanbanCtx.addCard({ ...newCard, id: uuid(), parent: id as string });
+    kanbanCtx.addCard({ ...newCard, uid: uuid(), parent: uid as string });
     setNewCard({ ...emptyCard });
-  }, [id, kanbanCtx, newCard]);
+  }, [uid, kanbanCtx, newCard]);
 
   useEffect(() => {
     if (cardCreationMode) addCardInputRef.current?.focus();
@@ -85,12 +82,12 @@ const Category = memo(function Category({
 
   const isDropOver = useCallback(
     (item: CardType) => {
-      if (id) {
-        const updatedCard = { ...item, parent: id as string };
+      if (uid) {
+        const updatedCard = { ...item, parent: uid as string };
         kanbanCtx.updateCard(updatedCard);
       }
     },
-    [id, kanbanCtx]
+    [uid, kanbanCtx]
   );
 
   const changeColor = useCallback(
@@ -98,12 +95,12 @@ const Category = memo(function Category({
       const updatedCat = { ...category, color: col };
       kanbanCtx.updateCategory(updatedCat);
     },
-    [kanbanCtx]
+    [category, kanbanCtx]
   );
 
   const deleteCategory = useCallback(() => {
-    kanbanCtx.removrCategory(id as string);
-  }, [kanbanCtx, id]);
+    kanbanCtx.removeCategory(uid as string);
+  }, [kanbanCtx, uid]);
 
   const enterEditMode = useCallback(() => {
     setEditMOde(true);
@@ -115,10 +112,12 @@ const Category = memo(function Category({
     collect: (monitor) => ({ isOver: !!monitor.isOver({ shallow: true }) }),
   }));
 
-  useEffect(() => {
-    const updatedCat = { ...category, title: debouncedTitle };
-    kanbanCtx.updateCategory(updatedCat);
-  }, [debouncedTitle]);
+  // useEffect(() => {
+  //   if (debouncedTitle && debouncedTitle.length > 0) {
+  //     const updatedCat = { ...category, title: debouncedTitle };
+  //     kanbanCtx.updateCategory(updatedCat);
+  //   }
+  // }, [category, debouncedTitle, kanbanCtx]);
 
   useEffect(() => {
     if (editMode && titleInputRef.current != null) {
@@ -129,7 +128,7 @@ const Category = memo(function Category({
 
   return (
     <div
-      className={`min-w-80 w-80 min-h-8 h-fit rounded-2xl shadow-lg shadow-slate-300 dark:shadow-slate-700 ${
+      className={`min-w-80 w-80 min-h-8 max-h-full h-fit rounded-2xl shadow-lg shadow-slate-300 dark:shadow-slate-700 ${
         isButton
           ? "bg-gray-200 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-500 cursor-pointer transition duration-200"
           : `bg-slate-100 dark:bg-slate-600 ${color}`
@@ -164,13 +163,16 @@ const Category = memo(function Category({
                 }}
                 onBlur={() => {
                   setEditMOde(false);
+                  kanbanCtx.updateCategory(category);
                 }}
                 size={catTitle.length + 1}
                 className="custom-input bg-transparent w-full"
                 ref={titleInputRef}
               />
             ) : (
-              <span className="select-none font-medium flex-1">{title}</span>
+              <span className="select-none font-semibold text-lg flex-1">
+                {title}
+              </span>
             )}
             <div className="flex gap-1 items-center">
               <IconButton
@@ -194,8 +196,13 @@ const Category = memo(function Category({
           </>
         )}
       </div>
-      {cards.length > 0 &&
-        cards.map((card) => <Card key={card.id} id={card.id} />)}
+      {cards.length > 0 && (
+        <div className="flex flex-col max-h-full overflow-auto gap-2 scroll-smooth scroll-px-6 scrollbar-thin scrollbar-track-slate-200 dark:scrollbar-track-slate-700 scrollbar-thumb-slate-300 dark:scrollbar-thumb-slate-600">
+          {cards.map((card) => (
+            <Card key={card.uid} id={card.uid} />
+          ))}
+        </div>
+      )}
       {cardCreationMode && (
         <CardCreationForm
           value={newCard.title}
