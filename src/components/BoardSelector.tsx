@@ -19,14 +19,7 @@ export default function BoardSelector() {
   useEffect(() => {
     const getBoards = async () => {
       if (currentUser != null) {
-        const data = await getUserBoards(currentUser.uid);
-        const userBoards = data.map((dp) => {
-          return {
-            uid: dp.uid as string,
-            owner: dp.owner as string,
-            title: dp.title as string,
-          };
-        });
+        const userBoards = await getUserBoards(currentUser.uid);
         setBoards(userBoards);
         setLoading(false);
       }

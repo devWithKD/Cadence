@@ -17,6 +17,7 @@ import CardCreationForm from "./CardCreationForm";
 import Card from "./Card";
 import { useDrop } from "react-dnd";
 import CategoryOpsBtn from "./CategoryOptionBtn";
+import { useAuth } from "../store/auth-context";
 
 const emptyCard: CardType = {
   uid: "",
@@ -26,6 +27,8 @@ const emptyCard: CardType = {
   hasCheckList: false,
   parent: "",
   title: "",
+  owner: "",
+  boardID: "",
 };
 
 const Category = memo(function Category({
@@ -40,12 +43,15 @@ const Category = memo(function Category({
   color?: string;
 }) {
   const kanbanCtx = useContext(KanbanContext);
+  const { currentUser } = useAuth();
   // const tooltipCtx = useContext(ToolTipContext);
   function createCategory() {
     kanbanCtx.addCategory({
       uid: uuid(),
       title: "Untitled",
       color: "slate",
+      boardID: kanbanCtx.currentBoard ? kanbanCtx.currentBoard.uid : "",
+      owner: currentUser ? currentUser.uid : "",
     });
   }
   const cards = kanbanCtx.cards.filter((card) => card.parent === uid);
@@ -69,9 +75,15 @@ const Category = memo(function Category({
   }, []);
 
   const createCard = useCallback(() => {
-    kanbanCtx.addCard({ ...newCard, uid: uuid(), parent: uid as string });
+    kanbanCtx.addCard({
+      ...newCard,
+      uid: uuid(),
+      parent: uid as string,
+      boardID: kanbanCtx.currentBoard ? kanbanCtx.currentBoard.uid : "",
+      owner: currentUser ? currentUser.uid : "",
+    });
     setNewCard({ ...emptyCard });
-  }, [uid, kanbanCtx, newCard]);
+  }, [kanbanCtx, newCard, uid, currentUser]);
 
   useEffect(() => {
     if (cardCreationMode) addCardInputRef.current?.focus();

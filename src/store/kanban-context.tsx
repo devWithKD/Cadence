@@ -153,7 +153,7 @@ export default function KanbanContextProvider({
   });
   const [dataLoading, setDataLoading] = useState<boolean>(false);
 
-  const { mode } = useAuth();
+  const { mode, currentUser } = useAuth();
 
   const addCardHandler = useCallback(
     async (card: CardType) => {
@@ -162,48 +162,48 @@ export default function KanbanContextProvider({
         payload: card,
       });
       try {
-        await addCardFirestore(card, kanbanState.currentBoard!.uid);
+        await addCardFirestore(card);
       } catch (error) {
         console.error(error);
       }
     },
-    [kanbanState.currentBoard]
+    []
   );
 
   const addCategoryHandler = useCallback(
     async (category: CategoryType) => {
       kanbanDispatch({ type: "ADD_CATEGORY", payload: category });
       try {
-        await addCategoryFirestore(category, kanbanState.currentBoard!.uid);
+        await addCategoryFirestore(category);
       } catch (error) {
         console.error(error);
       }
     },
-    [kanbanState.currentBoard]
+    []
   );
 
   const updateCardHandler = useCallback(
     async (card: CardType) => {
       kanbanDispatch({ type: "UPDATE_CARD", payload: card });
       try {
-        await updateCardFirestore(card, kanbanState.currentBoard!.uid);
+        await updateCardFirestore(card);
       } catch (error) {
         console.error(error);
       }
     },
-    [kanbanState.currentBoard]
+    []
   );
 
   const updateCategoryHandler = useCallback(
     async (category: CategoryType) => {
       kanbanDispatch({ type: "UPDATE_CATEGORY", payload: category });
       try {
-        await updateCategoryFirestore(category, kanbanState.currentBoard!.uid);
+        await updateCategoryFirestore(category);
       } catch (error) {
         console.error(error);
       }
     },
-    [kanbanState.currentBoard]
+    []
   );
 
   const removeCardHandler = useCallback(async (cardID: string) => {
@@ -253,10 +253,10 @@ export default function KanbanContextProvider({
       setDataLoading(true);
       try {
         const boardCards = await getCardsFromBoard(
-          kanbanState.currentBoard!.uid
+          kanbanState.currentBoard!.uid, currentUser?.uid as string
         );
         const boardCategories = await getCategoriesFromBoard(
-          kanbanState.currentBoard!.uid
+          kanbanState.currentBoard!.uid, currentUser?.uid as string
         );
         kanbanDispatch({
           type: "SET_DATA",
@@ -275,7 +275,7 @@ export default function KanbanContextProvider({
     } else if (kanbanState.currentBoard != null) {
       getBoardDataFromFirestore();
     }
-  }, [kanbanState.currentBoard, mode]);
+  }, [currentUser?.uid, kanbanState.currentBoard, mode]);
 
   return (
     <KanbanContext.Provider value={ctxValue}>{children}</KanbanContext.Provider>

@@ -25,6 +25,8 @@ export const cards = [
         status: false,
       },
     ],
+    boardID: "",
+    owner: "",
   },
   {
     uid: "task-456",
@@ -52,6 +54,8 @@ export const cards = [
         status: false,
       },
     ],
+    boardID: "",
+    owner: "",
   },
   {
     uid: "task-789",
@@ -79,6 +83,8 @@ export const cards = [
         status: false,
       },
     ],
+    boardID: "",
+    owner: "",
   },
   {
     uid: "task-010",
@@ -89,6 +95,8 @@ export const cards = [
     dueDate: new Date("2024-04-01"),
     description: "Respond to emails and phone calls from clients.",
     hasCheckList: false, // No checklist for this simple task
+    boardID: "",
+    owner: "",
     checkList: null,
   },
   {
@@ -117,6 +125,8 @@ export const cards = [
         status: false,
       },
     ],
+    boardID: "",
+    owner: "",
   },
 ];
 

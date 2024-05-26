@@ -6,21 +6,29 @@ export const categories = [
     uid: "uuid-1",
     title: "To-Do",
     color: "slate",
+    boardID: "",
+    owner: "",
   },
   {
     uid: uuid(),
     title: "In Progress",
     color: "yellow",
+    boardID: "",
+    owner: "",
   },
   {
     uid: uuid(),
     title: "Done",
     color: "green",
+    boardID: "",
+    owner: "",
   },
   {
     uid: uuid(),
     title: "Review",
     color: "indigo",
+    boardID: "",
+    owner: "",
   },
 ];
 

@@ -17,12 +17,16 @@ export interface CardType {
   description: string;
   hasCheckList: boolean;
   checkList?: Array<MileStone> | null;
+  boardID: string;
+  owner: string;
 }
 
 export interface CategoryType {
   uid: string;
   title: string;
   color: string;
+  boardID: string;
+  owner: string;
 }
 
 export interface KanbanState {
@@ -33,7 +37,7 @@ export interface KanbanState {
 
 export interface Board {
   title: string;
-  owner?: string;
+  owner: string;
   uid: string;
 }
 

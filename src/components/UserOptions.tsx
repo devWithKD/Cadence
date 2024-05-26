@@ -28,8 +28,8 @@ export default function UserOptions() {
   }, [navigate]);
 
   const deleteAccount = useCallback(async () => {
-    await deleteUser(currentUser as User);
     await deleteUserFirestore(currentUser?.uid as string);
+    await deleteUser(currentUser as User);
     navigate("/auth");
   }, [currentUser, navigate]);
 

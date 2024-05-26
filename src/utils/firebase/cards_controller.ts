@@ -10,11 +10,13 @@ import {
 } from "firebase/firestore";
 import { db } from "./firebase";
 import { CardType } from "../../interfaces";
+// import { User } from "firebase/auth";
 
-export const getCardsFromBoard = async (boardID: string) => {
+export const getCardsFromBoard = async (boardID: string, userID: string) => {
   const cardsQuery = query(
     collection(db, "cards"),
-    where("board", "==", boardID)
+    where("owner", "==", userID),
+    where("boardID", "==", boardID)
   );
   const cardsSnapshot = await getDocs(cardsQuery);
   const data: CardType[] = cardsSnapshot.docs.map((doc) => {
@@ -24,14 +26,14 @@ export const getCardsFromBoard = async (boardID: string) => {
   return data;
 };
 
-export const addCardFirestore = async (card: CardType, boardID: string) => {
+export const addCardFirestore = async (card: CardType) => {
   const { uid, ...cardData } = card;
-  return await setDoc(doc(db, "cards", uid), { ...cardData, board: boardID });
+  return await setDoc(doc(db, "cards", uid), { ...cardData });
 };
 
-export const updateCardFirestore = async (card: CardType, boardID: string) => {
+export const updateCardFirestore = async (card: CardType) => {
   const { uid, ...cardData } = card;
-  return await updateDoc(doc(db, "cards", uid), { ...cardData, board: boardID });
+  return await updateDoc(doc(db, "cards", uid), { ...cardData });
 };
 
 export const deleteCardFireStore = async (cardID: string) => {

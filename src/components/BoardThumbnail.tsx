@@ -48,9 +48,9 @@ export default function BoardThumbnail({
   }, [editMode]);
 
   const deleteUserBoard = useCallback(async () => {
-    await deleteBoard(board.uid);
+    await deleteBoard(board);
     onDelete(board.uid);
-  }, [board.uid, onDelete]);
+  }, [board, onDelete]);
 
   const navigateToBoard = useCallback(() => {
     setCurrentBoard(board);
