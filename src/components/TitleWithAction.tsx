@@ -27,7 +27,7 @@ export default function TitleWithAction({
         Icon={Icon}
         size={14}
         className={`rounded-full p-2 hover:bg-slate-400 primary-text transition-all delay-200 ${
-          showAction ? "opacity-100" : "opacity-0"
+          showAction ? "opacity-100" : "opacity-100 md:opacity-0"
         }`}
         onClick={action}
       />
