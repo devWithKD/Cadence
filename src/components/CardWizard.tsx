@@ -87,17 +87,17 @@ const CardWizard = memo(function CardWizard({
         switch (action) {
           case "due-date":
             card.hasDue = false;
-            card.dueDate = undefined;
+            card.dueDate = null;
             break;
 
           case "start-date":
             card.hasStart = false;
-            card.startDate = undefined;
+            card.startDate = null;
             break;
 
           case "milestone-list":
             card.hasCheckList = false;
-            card.checkList = undefined;
+            card.checkList = null;
             break;
 
           default:
@@ -177,7 +177,7 @@ const CardWizard = memo(function CardWizard({
   return createPortal(
     <div className="fixed z-50 w-screen h-screen top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex justify-center items-center backdrop-blur-sm backdrop-brightness-75" draggable={false}>
       <div
-        className="w-full lg:w-4/6 2xl:w-1/2 lg:aspect-[4/2] rounded-lg shadow-2xl shadow-slate-400 dark:shadow-slate-800 bg-slate-200 dark:bg-gradient-to-tr dark:from-slate-900 dark:to-slate-700 backdrop:backdrop-blur-sm dark:outline-slate-600 dark:outline outline-1 overflow-x-hidden relative py-6 px-4 lg:px-6"
+        className="w-full max-h-svh lg:w-4/6 2xl:w-1/2 lg:aspect-[4/2] rounded-lg shadow-2xl shadow-slate-400 dark:shadow-slate-800 bg-slate-200 dark:bg-gradient-to-tr dark:from-slate-900 dark:to-slate-700 backdrop:backdrop-blur-sm dark:outline-slate-600 dark:outline outline-1 overflow-x-hidden relative py-6 px-4 lg:px-6"
         ref={clickableAreaRef}
         draggable={false}
       >
